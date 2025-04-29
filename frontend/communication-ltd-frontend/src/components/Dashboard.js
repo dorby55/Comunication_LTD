@@ -1,4 +1,3 @@
-// Secure version of Dashboard.js
 import React, { useState, useEffect, useCallback } from "react";
 import { addCustomer, getCustomers } from "../services/api";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +16,6 @@ function Dashboard() {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  // SECURE: Function to encode HTML special characters
   const escapeHtml = (unsafe) => {
     return unsafe
       .replace(/&/g, "&amp;")
@@ -209,7 +207,6 @@ function Dashboard() {
             <tbody>
               {customers.map((customer) => (
                 <tr key={customer.customer_id || customer.id}>
-                  {/* SECURE: Safely rendering text content */}
                   <td>{customer.name}</td>
                   <td>{customer.email}</td>
                   <td>{customer.phone}</td>

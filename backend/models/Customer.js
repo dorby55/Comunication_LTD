@@ -1,11 +1,9 @@
-// Secure version of models/Customer.js
 const db = require("../config/db");
 
 class Customer {
   static async create(customerData, createdBy) {
     const { name, email, phone, address, packageType, sector } = customerData;
 
-    // SECURE: Using parameterized queries to prevent SQL Injection
     const query = `
       INSERT INTO customers (name, email, phone, address, package_type, sector, created_by, registration_date)
       VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
@@ -39,7 +37,6 @@ class Customer {
   }
 
   static async findById(customerId) {
-    // SECURE: Using parameterized queries to prevent SQL Injection
     const query = "SELECT * FROM customers WHERE customer_id = ?";
     const [rows] = await db.execute(query, [customerId]);
     return rows[0];
