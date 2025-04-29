@@ -1,7 +1,6 @@
-// models/User.js
+// Secure version of models/User.js
 const db = require("../config/db");
 const crypto = require("crypto");
-const bcrypt = require("bcryptjs");
 const passwordConfig = require("../config/password-config");
 
 class User {
@@ -14,6 +13,7 @@ class User {
     hmac.update(password);
     const hashedPassword = hmac.digest("hex");
 
+    // SECURE: Using parameterized queries to prevent SQL Injection
     const query = `
       INSERT INTO users (username, password_hash, email, salt, failed_login_attempts)
       VALUES (?, ?, ?, ?, 0)
@@ -29,12 +29,14 @@ class User {
   }
 
   static async findByUsername(username) {
+    // SECURE: Using parameterized queries to prevent SQL Injection
     const query = "SELECT * FROM users WHERE username = ?";
     const [rows] = await db.execute(query, [username]);
     return rows[0];
   }
 
   static async findByEmail(email) {
+    // SECURE: Using parameterized queries to prevent SQL Injection
     const query = "SELECT * FROM users WHERE email = ?";
     const [rows] = await db.execute(query, [email]);
     return rows[0];
@@ -50,6 +52,7 @@ class User {
     const hashedPassword = hmac.digest("hex");
 
     // Get current password to add to history
+    // SECURE: Using parameterized queries
     const [user] = await db.execute(
       "SELECT password_hash, password_history FROM users WHERE user_id = ?",
       [userId]
@@ -68,6 +71,7 @@ class User {
       passwordHistory = passwordHistory.slice(-passwordConfig.passwordHistory);
     }
 
+    // SECURE: Using parameterized queries
     const query = `
       UPDATE users 
       SET password_hash = ?, salt = ?, password_history = ? 
@@ -85,6 +89,7 @@ class User {
   }
 
   static async updateResetToken(userId, token, expiryDate) {
+    // SECURE: Using parameterized queries
     const query = `
       UPDATE users 
       SET reset_token = ?, reset_token_expiry = ? 
@@ -96,6 +101,7 @@ class User {
   }
 
   static async findByResetToken(token) {
+    // SECURE: Using parameterized queries
     const query =
       "SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > NOW()";
     const [rows] = await db.execute(query, [token]);
@@ -103,6 +109,7 @@ class User {
   }
 
   static async incrementLoginAttempts(userId) {
+    // SECURE: Using parameterized queries
     const query = `
       UPDATE users 
       SET failed_login_attempts = failed_login_attempts + 1 
@@ -114,6 +121,7 @@ class User {
   }
 
   static async resetLoginAttempts(userId) {
+    // SECURE: Using parameterized queries
     const query = `
       UPDATE users 
       SET failed_login_attempts = 0 
@@ -134,6 +142,7 @@ class User {
 
   static async isPasswordInHistory(userId, newPassword) {
     // Get user password history
+    // SECURE: Using parameterized queries
     const [user] = await db.execute(
       "SELECT salt, password_history FROM users WHERE user_id = ?",
       [userId]
