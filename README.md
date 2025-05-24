@@ -1,6 +1,6 @@
 # Communication_LTD_Vulnerable
 
-This project is a vulnerable web application developed for educational purposes, focusing on security training and testing.
+This project is a secure web application developed for educational purposes, focusing on security training and testing.
 
 ## Project Structure
 
@@ -110,4 +110,4 @@ The frontend should now be running at http://localhost:3000 or another available
 
 ### Testing the Application
 Once both frontend and backend servers are running, open your browser and go to: http://localhost:3000 ,
-You can now interact with the app and test its functionality. Remember, this app is intentionally vulnerable for educational purposes.
+You can now interact with the app and test its functionality.
