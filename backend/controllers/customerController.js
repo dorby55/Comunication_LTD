@@ -2,8 +2,6 @@ const Customer = require("../models/Customer");
 
 exports.addCustomer = async (req, res) => {
   try {
-    console.log("Request body:", req.body); // 🔍 Log input
-
     const { id, first_name, last_name } = req.body;
 
     const customer = await Customer.create({ id, first_name, last_name });
